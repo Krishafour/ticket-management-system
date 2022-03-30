@@ -1,0 +1,829 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Ticket Management System API",
+        "description": "A Simple Express Ticket Management System API",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Krishna Poul",
+            "email": "krishna.poul@afourtech.com"
+        }
+    },
+    "servers": [{
+        "url": "http://localhost:3000"
+      }],
+    "components": {
+        "schemas": {
+          "User": {
+            "type": "object",
+            "required": [
+                "user_name",
+                "password",
+                "role"
+                ],
+            "properties":{
+                "user_id": {
+                    "type": "string",
+                    "description": "User ID Of user"
+                  },
+                "user_name": {
+                    "type": "string",
+                    "description": "User Name Of user"
+                  },
+                  
+                  "password": {
+                    "type": "string",
+                    "description": "Password of user"
+                  },
+                  "role": {
+                    "type": "string",
+                    "description": "Role of user"
+                  }
+            },
+            "example": {
+                "user_name": "krishnapoul@gmail.com",
+                "password": "krish123",
+                "role":"user"
+              }
+              
+            },
+            "Ticket": {
+              "type": "object",
+              "required": [
+                  "ticket_description"
+                ],
+              "properties":{
+                  "ticket_id": {
+                      "type": "string",
+                      "description": "Ticket ID Of user"
+                    },
+                  "ticket_description": {
+                      "type": "string",
+                      "description": "Information of purpose of ticket"
+                    },
+                    "ticket_status": {
+                      "type": "string",
+                      "description": "Status of ticket"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "Raising Time of ticket"
+                    },
+                    "modified_at": {
+                      "type": "string",
+                      "description": "Status Time of ticket(when the status of ticket get changed)"
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "description": "Owner Of Ticket"
+                    },
+                    "approved_by": {
+                      "type": "string",
+                      "description": "By whom ticket is approved/reject/hold"
+                    }
+
+              },
+              "example": {
+                   "ticket_id":"e8c3fde5-e371-4eb2-b230-cf52f4a5b53b",
+                  "ticket_description": "for getting internet connection",
+                  "ticket_status":"progress",
+                  "created_at":"2022-03-07 12:48:21.314",
+                  "modified_at":"2022-03-07 12:48:21.314",
+                  "created_by":"shivdutjakore@gmail.com",
+                  "approved_by":"aniketkale@gmail.com"
+                }
+              },
+                "ResponseBody_Register_User": {
+                    "type": "object",
+                    "required": [
+                      "success_message"
+                  ],
+                    "properties": {
+                        "success_message":{
+                        "type":"string",
+                        "description":"Operation Done message "
+                        }
+                    },
+                    "example": {
+                        
+                        "success_message":"user registered successfully"
+
+                    }
+                }, 
+                "ResponseBody_Login_User": {
+                  "type": "object",
+                  "required": [
+                      "token"
+                  ],
+                  "properties": {
+                      "token": {
+                          "type": "string",
+                          "description": "jwt token of user"
+                      }
+                  },
+                  "example": {
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  }
+              },
+                "RequestBody_Login_User": {
+                  "type": "object",
+                  "required": [
+                      "username",
+                      "password"
+                  ],
+                  "properties": {
+                      "username": {
+                          "type": "string",
+                          "description": "user name of user"
+                      },
+                      "password": {
+                          "type": "string",
+                          "description": "Password of user"
+                      }
+                  },
+                  "example": {
+                      "user_name": "shivdutjakore@gmail.com",
+                      "password": "shivdut23"
+                  }
+              },
+              "RequestBody_Update_Ticket": {
+                "type": "object",
+                "required": [
+                    "ticket_description"
+                ],
+                "properties": {
+                    "ticket_description": {
+                        "type": "string",
+                        "description": "ticket description of ticket"
+                    }
+                },
+                "example": {
+                    "ticket_description": "ticket for getting pc"
+                }
+            },
+            "ResponseBody_Update_Ticket": {
+              "type": "object",
+              "required": [
+                  "success_message"
+              ],
+              "properties": {
+                  "success_message": {
+                    "type": "string",
+                    "description": "operation done message"
+                }
+              },
+              "example": {
+                  "success_message":"Ticket updated successfully"
+              }
+          },
+            "RequestBody_Update_Status": {
+              "type": "object",
+              "required": [
+                  "ticket_status"
+              ],
+              "properties": {
+                  "ticket_status": {
+                      "type": "string",
+                      "description": "ticket status of ticket"
+                  }
+              },
+              "example": {
+                  "ticket_status": "hold"
+              }
+          },
+          "ResponseBody_Update_Status": {
+            "type": "object",
+            "required": [
+                "success_message"
+            ],
+            "properties": {
+                "success_message": {
+                  "type": "string",
+                  "description": "operation done message"
+              }
+            },
+            "example": {
+                "success_message":"Ticket status updated successfully"
+            }
+        },
+                "RequestBody_raise_ticket": {
+                    "type": "object",
+                    "required": [
+                        "ticket_description"
+                    ],
+                    "properties": {
+                        "ticket_description": {
+                            "type": "string",
+                            "description": "details of ticket"
+                        }
+                },
+                "example": {
+                  "ticket_description": "Ticket for getting laptop"
+
+              }
+              },
+              "ResponseBody_Delete_Ticket": {
+                "type": "object",
+                "required": [
+                    "success_message"
+                ],
+                "properties": {
+                    "success_message": {
+                      "type": "string",
+                      "description": "operation done message"
+                  }
+                },
+                "example": {
+                    "success_message":"Ticket Deleted successfully"
+                }
+            },
+            "ResponseBody_Ticket_Status": {
+              "type": "object",
+              "required": [
+                  "ticket_id",
+                  "ticket_description",
+                  "ticket_status"
+              ],
+              "properties": {
+                  "ticket_id": {
+                      "type": "string",
+                      "description": "ticket id of ticket"
+                  },
+                  "ticket_description": {
+                    "type": "string",
+                    "description": "ticket for which it is raised"
+                },
+                "ticket_status": {
+                  "type": "string",
+                  "description": "ticket status of ticket"
+              }
+              },
+              "example": {
+                  "ticket_id":"e8c3fde5-e371-4eb2-b230-cf52f4a5b53b",
+                  "ticket_description":"ticket for pc",
+                  "ticket_status":"hold"
+              }
+          },
+                "ResponseBody_raise_ticket": {
+                  "type": "object",
+                  "required": [
+                    "success_message"
+                ],
+                  "properties": {
+                    "success_message": {
+                      "type": "string",
+                      "description": "operation done message"
+                  }
+                  },
+                  "example": {
+                      "message":"ticket raised successfully"
+
+                  }
+              }
+            },
+            
+        "securitySchemes": {
+          "jwt": {
+              "type": "http",
+              "scheme": "bearer",
+              "description": "JWT Authorization of an API",
+              "in": "header",
+              "bearerFormat": "JWT"
+            }
+          }
+        },
+          
+        "paths":{
+            "/register": {
+              "post": {
+                "tags": [
+                  "Ticket Management System"
+                ],
+                "summary": "save registration information to database",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "user registered successfully",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseBody_Register_User"
+                          
+                        }
+                      }
+                    }
+                  },
+                  "400": {
+                    "description": "Bad Request",
+                    "content":{
+                      "application/json":{
+                          "schema":{
+                              "type":"json",
+                              "example":
+                              {
+                                "error":"user name or password or role is required"
+                              }
+                          }
+                      }
+                  }
+                  },
+                  "500":{
+                      "description":"internal server error"
+                  }
+
+                }
+              }
+            },
+            "/login": {
+                "post": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "login information",
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/RequestBody_Login_User"
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "200": {
+                      "description": "You are logged in successfully",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                              "$ref": "#/components/schemas/ResponseBody_Login_User"
+                          }
+                        }
+                      }
+                    },
+                    "400": {
+                      "description": "Bad Request",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":
+                                {
+                                  "error_1":"user name is invalid",
+                                  "error_2":"Invalid passowrd"
+                                  
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              },
+              "/raiseTicket": {
+                "post": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Raising ticket information",
+                  "security": [{
+                    "jwt": []
+                  }],
+                 
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/RequestBody_raise_ticket"
+                        }
+                        
+                      }
+                    }
+                  },
+                  "responses": {
+                    "200": {
+                      "description": "You are ticket raised successfully",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                              "$ref": "#/components/schemas/ResponseBody_raise_ticket"
+                          }
+                        }
+                      }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "Unauthorized",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":
+                                {
+                                  "error":"Admin cannot raise a ticket"
+                                }
+                            }
+                        }
+                    }
+                  },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              },
+
+              
+              "/getTickets": {
+                "get": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Getting information of all tickets by user or admin",
+                  "security": [{
+                    "jwt": []
+                  }],
+                  
+                  "responses": {
+                    "200": {
+                      "description": "All ticket information of users",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Ticket"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "unauhorized",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":{
+                                  "error":"Unauthorized"
+                                }
+                            }
+                        }
+                     }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              },"/getTicketsHistory": {
+                "get": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Getting information history of all tickets by user or admin",
+                  "security": [{
+                    "jwt": []
+                  }],
+              
+                  "responses": {
+                    "200": {
+                      "description": "All ticket information history of users",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Ticket"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "unauhorized",
+                      "content":{
+                        "json":{
+                            "schema":{
+                                "type":"json",
+                                "example":
+                                {
+                                  "error":"Unauthorized"
+                                }
+                            }
+                        }
+                     }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              }, "/ticketStatus": {
+                "get": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Getting ticket_status of all tickets by user or admin",
+                  "security": [{
+                    "jwt": []
+                  }],
+                  
+                  "responses": {
+                    "200": {
+                      "description": "All ticket status of users",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/ResponseBody_Ticket_Status"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "unauhorized",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":{
+                                  "error":"Unauthorized"
+                                }
+                            }
+                        }
+                     }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              },
+
+              "/deleteTicket/{ticket_id}": {
+                "delete": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Delete a ticket",
+                  "security": [{
+                    "jwt": []
+                  }],
+                  "parameters": [
+                    {
+                      "in": "path",
+                      "name": "ticket_id",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                        "required": true,
+                        "descrption": "The ticket ID"
+                      }
+                    }
+                  ],
+                  "responses": {
+                    "200": {
+                      "description": "Ticket deleted successfully",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                              "$ref": "#/components/schemas/ResponseBody_Delete_Ticket"
+                            }
+                        }
+                    }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "unauhorized",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":{
+                                  "error":"Not able to withdraw ticket which is already withdrawal"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "403": {
+                      "description": "Forbidden",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":{
+                                  "error":"Not able to withdraw ticket of others"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              },
+              "/updateStatus/{ticket_id}": {
+                "put": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Update a ticket status",
+                  "security": [{
+                    "jwt": []
+                  }],
+                  "parameters": [
+                    {
+                      "in": "path",
+                      "name": "ticket_id",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                        "required": true,
+                        "descrption": "The ticket ID"
+                      }
+                    }
+                  ],
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/RequestBody_Update_Status"
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "200": {
+                      "description": "Ticket Status Updated successfully",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                              "$ref": "#/components/schemas/ResponseBody_Update_Status"
+                            }
+                        }
+                    }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "unauhorized",
+                      "content":{
+                        "json":{
+                            "schema":{
+                                "type":"json",
+                                "example":
+                                {
+                                  "error":"User is not able to update ticket status"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "403": {
+                      "description": "Forbidden",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":{
+                                  "error_1":"Admin can not set ticket status as hold or progress if ticket status already on hold or progress respectively ",
+                                  "error_2":"you are not allowed to update status of deleted ticket",
+                                  "error_3":"Admin can not change status of Approved and Rejected Ticket"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              },
+              
+              "/updateTicket/{ticket_id}": {
+                "put": {
+                  "tags": [
+                    "Ticket Management System"
+                  ],
+                  "summary": "Update a ticket",
+                  "security": [{
+                    "jwt": []
+                  }],
+                  "parameters": [
+                    {
+                      "in": "path",
+                      "name": "ticket_id",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                        "required": true,
+                        "descrption": "The ticket ID"
+                      }
+                    }
+                  ],
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/RequestBody_Update_Ticket"
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "200": {
+                      "description": "Ticket updated successfully",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                              "$ref": "#/components/schemas/ResponseBody_Update_Ticket"
+                            }
+                        }
+                    }
+                    },
+                    "400": {
+                      "description": "Bad Request"
+                    },
+                    "401": {
+                      "description": "unauhorized",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":
+                                {
+                                  "error":"Admin is not able to update ticket Description"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "403": {
+                      "description": "Forbidden",
+                      "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"json",
+                                "example":{
+                                  "error_1":"Not able to update ticket description of others",
+                                  "error_2":"You are not allowed to update ticket of deleted ticket",
+                                  "error_3":"User can not update ticket description of approved and rejected ticket"
+                                }
+                            }
+                        }
+                    }
+                    },
+                    "500":{
+                        "description":"internal server error"
+                    }
+
+                  }
+                }
+              }
+             
+        }    
+      }
+      
