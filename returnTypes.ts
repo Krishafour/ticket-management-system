@@ -69,4 +69,8 @@ export interface userOutputs{
        
     
   }
+  export interface register{
+    status: number,
+    message: messageDescription,
   
+  }

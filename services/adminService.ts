@@ -1,12 +1,13 @@
 import { response } from "express";
 import { QueryResult } from "pg";
-import { RESPONSE_STATUS, TICKETS_TABLE_QUERIES, ROLE, TICKET_STATUS } from "../constants";
+import { RESPONSE_STATUS, ROLE, TICKET_STATUS } from "../constants";
+import{  TICKETS_TABLE_QUERIES } from "../database/queries"
 import { databaseOperation } from "../database/queryfunctions";
 import { ticketInfoOutput, tickets, tokenData, users } from "../returnTypes";
 
 
 /**
-* This function is used to update ticket status of user by admin
+* This is update ticket status function
 *
 * @param {tickets} param is of tickets which include ticket_id of user
 * @param {tickets} body is of tickets which include ticket_status of user

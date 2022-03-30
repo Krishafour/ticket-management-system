@@ -1,25 +1,26 @@
 import bcryptjs from 'bcryptjs';
 import { v4 as uuidv4 } from "uuid";
-import { userOutputs, ticketInfoOutput, tokenData, tickets, user } from '../returnTypes';
-import { RESPONSE_STATUS, ROLE, USER_TABLE_QUERIES, TICKETS_TABLE_QUERIES, TICKET_STATUS } from '../constants';
+import { userOutputs, ticketInfoOutput, tokenData, tickets, user,register } from '../returnTypes';
+import { RESPONSE_STATUS, ROLE, TICKET_STATUS } from '../constants';
+import{  TICKETS_TABLE_QUERIES,USER_TABLE_QUERIES } from "../database/queries"
 import { QueryResult } from 'pg';
 import { databaseOperation } from "../database/queryfunctions";
 const jwt = require('jsonwebtoken');
 
 
 /**
-* This function is used to update ticket of user by user
+* This is registration function
 *
 * @param {user} body is of user which include user_name,password,role of user
 * @returns {Promis<userOutputs>}  this function is return promise of userOutputs which include user_id of successfully registered user
 */
-export function registration(body: user): Promise<userOutputs> {
-    return new Promise(async (resolve, reject) => {
+export  const registration:Function=async(body: user):Promise<register>=>{
+
         try {   //check if data already exist
             //fucntion add
             const user: QueryResult = await databaseOperation(USER_TABLE_QUERIES.USERNAME_USING_USERNAME, [body.user_name]);
             if (user.rowCount != 0) {
-                return resolve({ status: RESPONSE_STATUS.BAD_REQUEST, message: { error: "user already exist" } });
+                return ({status:RESPONSE_STATUS.BAD_REQUEST, message: { error: "user already exist" } });
             }
             //creating unique id
             const uniqueId: string = uuidv4();
@@ -28,18 +29,18 @@ export function registration(body: user): Promise<userOutputs> {
             const hashedPassword: string = await bcryptjs.hash(body.password, 10);
             const response: QueryResult = await databaseOperation(USER_TABLE_QUERIES.INSERT_USER, [body.user_id, body.user_name, hashedPassword, body.role.toLowerCase()]);
             if (response)
-                return resolve({ status: RESPONSE_STATUS.SUCCESS, message: { succsses_message: " user registered successfully" } });
+          
+            return ({ status: RESPONSE_STATUS.SUCCESS, message: { succsses_message: " user registered successfully" }});
         }
-        catch (error: any | unknown) {
-
-            return reject(error);
-        }
-    })
+        
+        catch (error) {
+            throw error;
+        }      
 }
 
 
 /**
-* This function is main function used to login by useror admin.
+* This is login function.
 * 
 * @param {user} body is of user which include user_name and password of user
 * @returns {Promis<userOutputs>}  this function is return promise of userOutputs which include jwt token of user logged in successfully 
@@ -73,7 +74,7 @@ export function login(body: user): Promise<userOutputs> {
 
 
 /**
-* This function is main function used to raise a ticket  by user
+* This is raising ticket function
 *
 * @param {tickets} body is of tickets which include ticket_description of user
 * @param {tokenData} token is of tokenData which includes user login information
@@ -113,7 +114,7 @@ export function raise_A_Ticket(body: tickets, token: tokenData): Promise<ticketI
 
 
 /**
-* This function is main function used to get all ticket of user by user or admin
+* This is all ticket info function
 *
 * @param {tokenData} token is of tokenData which includes user login information
 * @returns {Promis<ticketInfoOutput>}  this function is return promise of ticketInfoOutput which include ticket informaton
@@ -141,7 +142,7 @@ export function all_Ticket_Info(token: tokenData): Promise<ticketInfoOutput> {
 
 
 /**
-* This function is main function used to delete ticket of user by user or admin
+* This is delete ticket function
 *
 * @param {tickets} param is of tickets which include ticket_id of user
 * @param {tokenData} token is of tokenData which includes user login information
@@ -175,7 +176,7 @@ export function deleteTicket(param: tickets, token: tokenData): Promise<ticketIn
 }
 
 /**
-* This function is main function used to get ticket history of user by user or admin
+* This is all ticket function function
 *
 * @param {tokenData} token is of tokenData which includes user login information
 * @returns {Promis<ticketInfoOutput>}  this function is return promise of ticketInfoOutput which include all ticket infromation
@@ -202,7 +203,7 @@ export function allTicketHistory(token: tokenData): Promise<ticketInfoOutput> {
 
 
 /**
-* This function is main function used to update ticket of user by user
+* This is update ticket function
 *
 * @param {tickets} param is of tickets which include ticket_id of user
 * @param {tickets} body is of tickets which include ticket_description of user
@@ -241,7 +242,7 @@ export function updateTicket(param: tickets, body: tickets, token: tokenData): P
     })
 }
 /**
-* This function is main function used to get ticket status of user by user or admin
+* This is getting ticket status function
 *
 * @param {tokenData} token is of tokenData which includes user login information
 * @returns {Promis<ticketInfoOutput>}  this function is return promise of ticketInfoOutput which include all ticket infromation
